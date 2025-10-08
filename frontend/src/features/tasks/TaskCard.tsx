@@ -1,6 +1,11 @@
 import React from 'react';
 import { Task } from '../../types';
-import { Clock, Calendar, Paperclip, User, CheckCircle, AlertCircle } from 'lucide-react';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Paperclip from 'lucide-react/dist/esm/icons/paperclip';
+import User from 'lucide-react/dist/esm/icons/user';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 
 interface TaskCardProps {
   task: Task;

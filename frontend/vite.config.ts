@@ -59,10 +59,15 @@ export default defineConfig({
       '/v1/api': {
         target: 'http://localhost:8000',
         changeOrigin: true,
+        configure: (proxy, options) => {
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            if (req.url.endsWith('/icon.png')) {
+              proxyRes.headers['Cache-Control'] = 'public, max-age=3600';
+            }
+          });
+        },
       },
     },
   },
-  optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
+
 });

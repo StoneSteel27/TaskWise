@@ -2,7 +2,12 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiService } from '../../services/api.provider';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { Calendar, ChevronLeft, ChevronRight, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left';
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 
 const StudentAttendanceView: React.FC = () => {
   const [currentDate, setCurrentDate] = React.useState(new Date());

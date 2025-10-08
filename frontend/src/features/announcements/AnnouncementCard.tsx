@@ -1,6 +1,8 @@
 import React from 'react';
 import { Announcement } from '../../types';
-import { Clock, Paperclip, User } from 'lucide-react';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Paperclip from 'lucide-react/dist/esm/icons/paperclip';
+import User from 'lucide-react/dist/esm/icons/user';
 import { getAttachmentUrl } from '../../utils/url';
 
 interface AnnouncementCardProps {

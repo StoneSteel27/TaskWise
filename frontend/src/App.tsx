@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { BrowserRouter as Router, Route, Routes, Navigate, useParams, useOutletContext, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
-import Login from './features/auth/Login';
-import Dashboard from './features/dashboard/Dashboard';
-import CourseDashboard from './features/dashboard/CourseDashboard';
 import LoadingSpinner from './components/LoadingSpinner';
-import FullScreenModal from './features/tasks/FullScreenModal';
-import TaskView from './features/tasks/TaskView';
-import AnnouncementView from './features/announcements/AnnouncementView';
 import { apiService } from './services/api.provider';
 import { Course, Task } from './types';
 import { CheckCircle, AlertTriangle, UploadCloud, ArrowLeft } from 'lucide-react';
-import StudentAttendanceView from './features/attendance/StudentAttendanceView';
-import StudentListView from './features/students/StudentListView';
-import StudentProfileView from './features/students/StudentProfileView';
+
+const Login = React.lazy(() => import('./features/auth/Login'));
+const Dashboard = React.lazy(() => import('./features/dashboard/Dashboard'));
+const CourseDashboard = React.lazy(() => import('./features/dashboard/CourseDashboard'));
+const TaskView = React.lazy(() => import('./features/tasks/TaskView'));
+const AnnouncementView = React.lazy(() => import('./features/announcements/AnnouncementView'));
+const StudentAttendanceView = React.lazy(() => import('./features/attendance/StudentAttendanceView'));
+const StudentListView = React.lazy(() => import('./features/students/StudentListView'));
+const StudentProfileView = React.lazy(() => import('./features/students/StudentProfileView'));
+const TeacherAttendanceDashboard = React.lazy(() => import('./features/attendance/TeacherAttendanceDashboard'));
+const TeacherAttendanceView = React.lazy(() => import('./features/attendance/TeacherAttendanceView'));
+const SubmissionsView = React.lazy(() => import('./features/tasks/SubmissionsView'));
+const SchoolAnnouncementView = React.lazy(() => import('./features/announcements/SchoolAnnouncementView'));
+const FullScreenModal = React.lazy(() => import('./features/tasks/FullScreenModal'));
 
 const getStatusChip = (status: Task['status']) => {
   const baseClasses = "px-3 py-1 text-xs font-semibold rounded-full inline-flex items-center";
@@ -137,14 +142,19 @@ const AnnouncementViewWrapper = () => {
   );
 };
 
-import TeacherAttendanceDashboard from './features/attendance/TeacherAttendanceDashboard';
-import TeacherAttendanceView from './features/attendance/TeacherAttendanceView';
-import SubmissionsView from './features/tasks/SubmissionsView';
 
-import SchoolAnnouncementView from './features/announcements/SchoolAnnouncementView';
 
 const AppContent: React.FC = () => {
   const { user, isLoading } = useAuth();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (user) {
+      const queryKey = user.user_type === 'TEACHER' ? ['classes'] : ['courses'];
+      const queryFn = user.user_type === 'TEACHER' ? () => apiService.getClasses() : () => apiService.getCourses();
+      queryClient.prefetchQuery({ queryKey, queryFn });
+    }
+  }, [user, queryClient]);
 
   if (isLoading) {
     return (
@@ -171,21 +181,23 @@ const AppContent: React.FC = () => {
 
   return (
     <Layout>
-      <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/attendance" element={<StudentAttendanceView />} />
-        <Route path="/mark-attendance" element={<MarkStudentAttendanceView />} />
-        <Route path="/my-attendance" element={<TeacherAttendanceView />} />
-        <Route path="/students" element={<StudentListView />} />
-        <Route path="/student/:rollNumber" element={<StudentProfileView />} />
-        <Route path="/school-announcement/:announcementId" element={<SchoolAnnouncementView />} />
-        <Route path="/course/:courseId" element={<CourseDashboard />}>
-          <Route path="task/:taskId" element={<TaskViewWrapper />} />
-          <Route path="announcement/:announcementId" element={<AnnouncementViewWrapper />} />
-        </Route>
-        <Route path="/course/:courseId/task/:taskId/submissions" element={<SubmissionsView />} />
-        <Route path="/" element={<Navigate to="/dashboard" />} />
-      </Routes>
+      <Suspense fallback={<div className="flex items-center justify-center h-full"><LoadingSpinner /></div>}>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/attendance" element={<StudentAttendanceView />} />
+          <Route path="/mark-attendance" element={<MarkStudentAttendanceView />} />
+          <Route path="/my-attendance" element={<TeacherAttendanceView />} />
+          <Route path="/students" element={<StudentListView />} />
+          <Route path="/student/:rollNumber" element={<StudentProfileView />} />
+          <Route path="/school-announcement/:announcementId" element={<SchoolAnnouncementView />} />
+          <Route path="/course/:courseId" element={<CourseDashboard />}>
+            <Route path="task/:taskId" element={<TaskViewWrapper />} />
+            <Route path="announcement/:announcementId" element={<AnnouncementViewWrapper />} />
+          </Route>
+          <Route path="/course/:courseId/task/:taskId/submissions" element={<SubmissionsView />} />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+        </Routes>
+      </Suspense>
     </Layout>
   );
 };

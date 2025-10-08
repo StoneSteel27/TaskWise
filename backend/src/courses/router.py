@@ -5,8 +5,17 @@ from src.auth.dependencies import get_current_user
 from src.auth.models import User
 from src.users import schemas
 from src.courses import service
+from src.courses import schemas as course_schemas
 
 router = APIRouter()
+
+@router.get("/courses/{course_id}")
+async def get_course(course_id: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """
+    Retrieves details for a specific course.
+    """
+    course = service.get_course(db, course_id=course_id, user=current_user)
+    return course
 
 @router.put("/me/{course_id}/accent_image")
 async def update_course_accent_image(course_id: str, accent_image: UploadFile = File(...), current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):

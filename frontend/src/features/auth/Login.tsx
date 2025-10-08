@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { GraduationCap, Eye, EyeOff, Loader2 } from 'lucide-react';
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import { showErrorToast } from '../../utils/notifications';
 
 const Login: React.FC = () => {

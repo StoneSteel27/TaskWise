@@ -10,8 +10,6 @@ interface SubmissionsListProps {
   taskId: string;
 }
 
-type FilterStatus = 'ALL' | 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'DELAYED';
-
 const SubmissionsList: React.FC<SubmissionsListProps> = ({ submissions, onApprove, onReject, courseId, taskId }) => {
   const [filter, setFilter] = useState<FilterStatus>('ALL');
 

@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from src.auth.models import User, UserRole
 from src.courses.models import Course
-from src.tasks.models import Submission, TaskStatus
+from src.tasks.models import Submission, TaskStatus, Grade
 from src.attendance.models import Attendance, AttendanceStatusEnum
 from src.schedules.models import Schedule, DayOfWeek
 from datetime import date, timedelta
@@ -110,10 +110,34 @@ def get_student_profile(db: Session, student_roll_number: str):
     tasks_total = sum(len(course.tasks) for course in courses)
 
     # Calculate completed tasks for the student
-    tasks_completed = db.query(Submission).filter(
+    submissions = db.query(Submission).filter(
         Submission.student_id == student.roll_number,
         Submission.status == TaskStatus.APPROVED
-    ).count()
+    ).all()
+    tasks_completed = len(submissions)
+
+    # Calculate grades
+    grade_to_numeric = {Grade.S: 5, Grade.A: 4, Grade.B: 3, Grade.C: 2, Grade.D: 1}
+    grade_counts = {grade: 0 for grade in Grade}
+    for sub in submissions:
+        if sub.grade:
+            grade_counts[sub.grade] += 1
+
+    total_submissions = sum(grade_counts.values())
+    if total_submissions > 0:
+        overall_grade_value = sum(grade_to_numeric[g] * count for g, count in grade_counts.items()) / total_submissions
+        if overall_grade_value >= 4.5:
+            overall_grade = Grade.S
+        elif overall_grade_value >= 3.5:
+            overall_grade = Grade.A
+        elif overall_grade_value >= 2.5:
+            overall_grade = Grade.B
+        elif overall_grade_value >= 1.5:
+            overall_grade = Grade.C
+        else:
+            overall_grade = Grade.D
+    else:
+        overall_grade = Grade.D
 
     return {
         "profile_picture_url": f"{student.roll_number}.png",
@@ -124,6 +148,14 @@ def get_student_profile(db: Session, student_roll_number: str):
             "attendance_percentage": int(get_attendance_records(db, student)['attendance_percentage']),
             "tasks_completed": tasks_completed,
             "tasks_total": tasks_total
+        },
+        "grades": {
+            "s": grade_counts.get(Grade.S, 0),
+            "a": grade_counts.get(Grade.A, 0),
+            "b": grade_counts.get(Grade.B, 0),
+            "c": grade_counts.get(Grade.C, 0),
+            "d": grade_counts.get(Grade.D, 0),
+            "overall": overall_grade
         },
         "contact_info": {
             "email": student.email,

@@ -56,3 +56,21 @@ async def get_current_principal(current_user: User = Depends(get_current_user)) 
             detail="The user is not a principal"
         )
     return current_user
+
+async def get_current_student_or_homeroom_teacher(student_roll_number: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)) -> User:
+    if current_user.role == models.UserRole.STUDENT and current_user.roll_number == student_roll_number:
+        return current_user
+
+    if current_user.role == models.UserRole.TEACHER:
+        homeroom_classes = db.query(Course).filter(Course.homeroom_teacher_id == current_user.roll_number).all()
+        if homeroom_classes:
+            # Check if the requested student is in one of the homeroom teacher's classes
+            for course in homeroom_classes:
+                for student in course.students:
+                    if student.roll_number == student_roll_number:
+                        return current_user
+
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="You are not authorized to view this profile"
+    )

@@ -13,4 +13,5 @@ dependencies = [
     "crudadmin>=0.4.2",
     "itsdangerous>=2.2.0",
     "webauthn>=2.7.0",
+    "shapely>=2.1.1",
 ]

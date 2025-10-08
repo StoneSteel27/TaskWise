@@ -73,6 +73,18 @@ export interface StudentAttendanceHistory {
   status: 'PRESENT' | 'ABSENT' | 'LEAVE';
 }
 
+export interface TeacherAttendanceHistory {
+  date: string;
+  check_in_time: string | null;
+  check_out_time: string | null;
+}
+
+export interface TeacherAttendanceHistory {
+  date: string;
+  check_in_time: string | null;
+  check_out_time: string | null;
+}
+
 export interface TeacherAttendanceRecord {
   student_roll_number: string;
   status: 'PRESENT' | 'ABSENT' | 'LEAVE';
@@ -100,6 +112,14 @@ export interface Student {
     attendance_percentage: number;
     tasks_completed: number;
     tasks_total: number;
+  };
+  grades?: {
+    s: number;
+    a: number;
+    b: number;
+    c: number;
+    d: number;
+    overall: string;
   };
   contact_info?: {
     email: string;
@@ -172,4 +192,10 @@ export interface TeacherAttendanceStatus {
   check_in_time?: string;
   check_out_time?: string;
   is_device_registered: boolean;
+}
+
+export interface GeoFence {
+  id: number;
+  name: string;
+  coordinates: [number, number][][];
 }

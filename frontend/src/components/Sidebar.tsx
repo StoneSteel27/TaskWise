@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { useAuth, User } from '../context/AuthContext';
-import { Home, BookOpen, UserCheck, GraduationCap, LogOut, Users } from 'lucide-react';
+import Home from 'lucide-react/dist/esm/icons/home';
+import BookOpen from 'lucide-react/dist/esm/icons/book-open';
+import UserCheck from 'lucide-react/dist/esm/icons/user-check';
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import Users from 'lucide-react/dist/esm/icons/users';
+import { Link } from 'react-router-dom';
 import CoursesModal from '../features/courses/CoursesModal';
 import AttendanceMenuModal from '../features/attendance/AttendanceMenuModal';
 
@@ -53,10 +59,10 @@ const Sidebar: React.FC = () => {
 
     if (item.href) {
       return (
-        <a href={item.href} {...commonProps}>
+        <Link to={item.href} {...commonProps}>
           <item.icon className="w-5 h-5" />
           <span className="font-medium">{item.label}</span>
-        </a>
+        </Link>
       );
     }
 
@@ -76,10 +82,10 @@ const Sidebar: React.FC = () => {
 
     if (item.href) {
       return (
-        <a href={item.href} {...commonProps}>
+        <Link to={item.href} {...commonProps}>
           <item.icon className="w-6 h-6 mb-1" />
           <span className="text-xs font-medium">{item.label}</span>
-        </a>
+        </Link>
       );
     }
 
@@ -106,7 +112,7 @@ const Sidebar: React.FC = () => {
 
       <div className="hidden md:flex p-4 border-t border-gray-200">
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center space-x-3">
+          <Link to={`/student/${user.roll_number}`} className="flex items-center space-x-3">
             <img
               src={user?.profile_picture_url || 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150'}
               alt={user?.name}
@@ -116,7 +122,7 @@ const Sidebar: React.FC = () => {
               <p className="text-sm font-medium text-gray-900">{user?.name}</p>
               <p className="text-xs text-gray-500">{user?.user_type}</p>
             </div>
-          </div>
+          </Link>
           <button
             onClick={logout}
             className="p-2 text-gray-400 hover:text-red-600 transition-colors"

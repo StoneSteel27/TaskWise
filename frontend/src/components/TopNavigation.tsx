@@ -1,6 +1,8 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, GraduationCap } from 'lucide-react';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import GraduationCap from 'lucide-react/dist/esm/icons/graduation-cap';
+import { Link } from 'react-router-dom';
 
 const TopNavigation: React.FC = () => {
   const { user, logout } = useAuth();
@@ -20,11 +22,13 @@ const TopNavigation: React.FC = () => {
         <div className="flex items-center space-x-4">
           {/* User menu */}
           <div className="flex items-center space-x-3">
-            <img
-              src={user?.profile_picture_url || 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150'}
-              alt={user?.name}
-              className="w-8 h-8 rounded-full object-cover"
-            />
+            <Link to={`/student/${user?.roll_number}`}>
+              <img
+                src={user?.profile_picture_url || 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150'}
+                alt={user?.name}
+                className="w-8 h-8 rounded-full object-cover"
+              />
+            </Link>
           </div>
 
           {/* Logout button */}

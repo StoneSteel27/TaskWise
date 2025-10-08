@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Submission } from '../../types';
-import { Check, Download, X, ChevronDown } from 'lucide-react';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Download from 'lucide-react/dist/esm/icons/download';
+import X from 'lucide-react/dist/esm/icons/x';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import { apiService } from '../../services/api.provider';
 import RejectSubmissionModal from './RejectSubmissionModal';
 import ApprovalModal from './ApprovalModal';
@@ -10,10 +13,11 @@ interface StudentSubmissionCardProps {
   submission: Submission;
   courseId: string;
   taskId: string;
-  onStatusChange: () => void;
+  onApprove: (rollNumber: string, grade: string, remarks?: string) => void;
+  onReject: (rollNumber: string, reason: string) => void;
 }
 
-const StudentSubmissionCard: React.FC<StudentSubmissionCardProps> = ({ submission, courseId, taskId, onStatusChange }) => {
+const StudentSubmissionCard: React.FC<StudentSubmissionCardProps> = ({ submission, courseId, taskId, onApprove, onReject }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
@@ -41,8 +45,8 @@ const StudentSubmissionCard: React.FC<StudentSubmissionCardProps> = ({ submissio
     try {
       await apiService.rejectSubmission(courseId, taskId, submission.student_roll_number, reason);
       showSuccessToast('Submission rejected.');
-      onStatusChange();
-    } catch (err) {
+      onReject(submission.student_roll_number, reason);
+    } catch {
       showErrorToast('Failed to reject submission.');
     } finally {
       setIsSubmitting(false);
@@ -55,8 +59,9 @@ const StudentSubmissionCard: React.FC<StudentSubmissionCardProps> = ({ submissio
     try {
       await apiService.approveSubmission(courseId, taskId, submission.student_roll_number, grade, remarks);
       showSuccessToast('Submission approved!');
-      onStatusChange();
+      onApprove(submission.student_roll_number, grade, remarks);
     } catch (err) {
+      console.error('Failed to approve submission:', err);
       showErrorToast('Failed to approve submission.');
     } finally {
       setIsSubmitting(false);

@@ -22,3 +22,11 @@ class ClassAttendanceRecord(BaseModel):
 
 class ClassAttendanceHistory(BaseModel):
     records: List[ClassAttendanceRecord]
+
+class TeacherAttendanceRecord(BaseModel):
+    date: date
+    check_in_time: str | None
+    check_out_time: str | None
+
+class TeacherAttendanceHistory(BaseModel):
+    history: List[TeacherAttendanceRecord]

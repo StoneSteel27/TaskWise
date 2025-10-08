@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { apiService } from '../../services/api.provider';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { X } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
 import { showSuccessToast, showErrorToast } from '../../utils/notifications';
 import { useQueryClient } from '@tanstack/react-query';
 import { useModalBackButton } from '../../utils/useModalBackButton';

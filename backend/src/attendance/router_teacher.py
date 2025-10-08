@@ -15,8 +15,8 @@ from datetime import datetime
 from src.database import get_db
 from src.auth.dependencies import get_current_teacher
 from src.auth.models import User
-from src.attendance import service_teacher
-from src.attendance.models import WebAuthnCredential
+from src.attendance import service_teacher, schemas
+from src.attendance.models import WebAuthnCredential, TeacherDevice, RecoveryCode
 
 router = APIRouter(prefix="/attendance/teacher", tags=["teacher-attendance"])
 
@@ -33,6 +33,8 @@ class WebAuthnRegistrationRequest(BaseModel):
     raw_id: str = Field(alias="rawId")
     response: dict
     type: str
+    device_name: str
+    recovery_code: str
 
 class WebAuthnAuthenticationRequest(BaseModel):
     id: str
@@ -48,8 +50,9 @@ class Geolocation(BaseModel):
 
 @router.get("/webauthn/register-options")
 def get_registration_options(request: Request, current_user: User = Depends(get_current_teacher), db: Session = Depends(get_db)):
-    if service_teacher.get_webauthn_credential(db, current_user):
-        raise HTTPException(status_code=409, detail="A device is already registered for this user.")
+    devices = db.query(TeacherDevice).filter_by(user_roll_number=current_user.roll_number).all()
+    if len(devices) >= 2:
+        raise HTTPException(status_code=409, detail="You have already registered the maximum number of devices (2).")
 
     options = webauthn.generate_registration_options(
         rp_id=RP_ID,
@@ -93,9 +96,24 @@ def verify_registration(
         user_roll_number=current_user.roll_number,
         credential_id=verified.credential_id,
         public_key=verified.credential_public_key,
-        sign_count=verified.sign_count
+        sign_count=verified.sign_count,
+        device_name=credential_data.device_name
     )
     db.add(new_credential)
+
+    new_device = TeacherDevice(
+        user_roll_number=current_user.roll_number,
+        device_name=credential_data.device_name
+    )
+    db.add(new_device)
+
+    from src.auth.service import pwd_context
+    new_recovery_code = RecoveryCode(
+        user_roll_number=current_user.roll_number,
+        code_hash=pwd_context.hash(credential_data.recovery_code)
+    )
+    db.add(new_recovery_code)
+
     db.commit()
     return {"message": "Device registered successfully."}
 
@@ -209,6 +227,7 @@ def verify_check_out(
 class RecoveryCheckInPayload(BaseModel):
     code: str
     location: Geolocation
+    reason: str
 
 @router.post("/recovery-check-in")
 def recovery_check_in(
@@ -216,8 +235,22 @@ def recovery_check_in(
     current_user: User = Depends(get_current_teacher),
     db: Session = Depends(get_db)
 ):
-    result = service_teacher.verify_recovery_code(db, current_user, payload.code, payload.location.latitude, payload.location.longitude)
+    result = service_teacher.verify_recovery_code(db, current_user, payload.code, payload.location.latitude, payload.location.longitude, payload.reason)
     return {"message": "Check-in successful using recovery code.", "check_in_time": result.check_in_time}
+
+class RecoveryCheckOutPayload(BaseModel):
+    code: str
+    location: Geolocation
+    reason: str | None = None
+
+@router.post("/recovery-check-out")
+def recovery_check_out(
+    payload: RecoveryCheckOutPayload,
+    current_user: User = Depends(get_current_teacher),
+    db: Session = Depends(get_db)
+):
+    result = service_teacher.verify_recovery_code_for_checkout(db, current_user, payload.code, payload.location.latitude, payload.location.longitude, payload.reason)
+    return {"message": "Check-out successful using recovery code.", "check_out_time": result.check_out_time}
 
 
 class TeacherAttendanceStatus(BaseModel):
@@ -232,3 +265,13 @@ def get_status(
     db: Session = Depends(get_db)
 ):
     return service_teacher.get_teacher_attendance_status(db, current_user)
+
+@router.get("/me/attendance-history", response_model=schemas.TeacherAttendanceHistory)
+async def get_teacher_attendance_history(
+    year: int,
+    month: int,
+    current_user: User = Depends(get_current_teacher),
+    db: Session = Depends(get_db)
+):
+    history = service_teacher.get_teacher_attendance_history(db, current_user, year, month)
+    return {"history": history}

@@ -1,10 +1,9 @@
 import React from 'react';
-import { DivideIcon as LucideIcon } from 'lucide-react';
 
 interface StatsCardProps {
   title: string;
   value: string;
-  icon: typeof LucideIcon;
+  icon: React.ElementType;
   color: string;
   trend?: string;
 }

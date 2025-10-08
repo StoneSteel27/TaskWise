@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiService } from '../../services/api.provider';
-import { Task, Submission } from '../../types';
+import { Task } from '../../types';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { Users, Filter as FilterIcon } from 'lucide-react';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Filter from 'lucide-react/dist/esm/icons/filter';
 import StudentSubmissionCard from './StudentSubmissionCard';
 import SearchBar from '../../components/SearchBar';
 
 type FilterStatus = 'ALL' | 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'DELAYED';
 
 const SubmissionsView: React.FC = () => {
+  const FilterIcon = Filter;
   const { courseId, taskId } = useParams<{ courseId: string; taskId: string }>();
   const [task, setTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,6 +57,14 @@ const SubmissionsView: React.FC = () => {
       setTask(updatedTask);
       setIsLoading(false);
     }
+  };
+
+  const handleApprove = () => {
+    handleSubmissionUpdate();
+  };
+
+  const handleReject = () => {
+    handleSubmissionUpdate();
   };
 
   if (isLoading) {
@@ -135,7 +145,8 @@ const SubmissionsView: React.FC = () => {
               submission={submission}
               courseId={courseId!}
               taskId={taskId!}
-              onStatusChange={handleSubmissionUpdate}
+              onApprove={handleApprove}
+              onReject={handleReject}
             />
           ))
         ) : (

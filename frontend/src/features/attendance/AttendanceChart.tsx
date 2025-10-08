@@ -1,6 +1,7 @@
 import React from 'react';
 import { AttendanceRecord } from '../../types';
-import { Calendar, TrendingUp } from 'lucide-react';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 
 interface AttendanceChartProps {
   attendance: AttendanceRecord;

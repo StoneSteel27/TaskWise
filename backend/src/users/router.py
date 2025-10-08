@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from src.database import get_db
-from src.auth.dependencies import get_current_user, get_current_homeroom_teacher
+from src.auth.dependencies import get_current_user, get_current_homeroom_teacher, get_current_student_or_homeroom_teacher
 from src.auth.models import User, UserRole
 from src.users import schemas, service
 
@@ -71,10 +71,10 @@ async def get_teacher_classes(current_user: User = Depends(get_current_user), db
     return {"classes": classes}
 
 @router.get("/students/{student_roll_number}", response_model=schemas.StudentProfile)
-async def get_student_profile(student_roll_number: str, current_user: User = Depends(get_current_homeroom_teacher), db: Session = Depends(get_db)):
+async def get_student_profile(student_roll_number: str, current_user: User = Depends(get_current_student_or_homeroom_teacher), db: Session = Depends(get_db)):
     """
     Retrieves the detailed profile of a specific student.
-    Only accessible by homeroom teachers.
+    Accessible by the student themselves or their homeroom teacher.
     """
     return service.get_student_profile(db, student_roll_number)
 

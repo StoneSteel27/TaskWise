@@ -33,13 +33,14 @@ class TeacherAttendance(Base):
 class WebAuthnCredential(Base):
     __tablename__ = "webauthn_credentials"
     id = Column(Integer, primary_key=True, index=True)
-    user_roll_number = Column(String, ForeignKey("users.roll_number"), unique=True) # Assuming one credential per teacher for simplicity
+    user_roll_number = Column(String, ForeignKey("users.roll_number"))
+    device_name = Column(String) # e.g., "Pixel 7 Pro"
     credential_id = Column(LargeBinary, unique=True, index=True)
     public_key = Column(LargeBinary)
     sign_count = Column(Integer, default=0)
     # Storing transports can help enforce mobile-only, but client-side hints are more practical
-    transports = Column(String, nullable=True) 
-    
+    transports = Column(String, nullable=True)
+
     user = relationship("User")
 
 class RecoveryCode(Base):
@@ -48,5 +49,14 @@ class RecoveryCode(Base):
     user_roll_number = Column(String, ForeignKey("users.roll_number"))
     code_hash = Column(String, unique=True) # Store hash, not plaintext
     is_used = Column(Boolean, default=False)
+    reason = Column(String, nullable=True) # Reason for using the recovery code
 
+    user = relationship("User")
+
+class TeacherDevice(Base):
+    __tablename__ = "teacher_devices"
+    id = Column(Integer, primary_key=True, index=True)
+    user_roll_number = Column(String, ForeignKey("users.roll_number"))
+    device_name = Column(String)
+    
     user = relationship("User")

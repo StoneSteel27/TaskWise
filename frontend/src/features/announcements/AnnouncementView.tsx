@@ -3,7 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Announcement } from '../../types';
 import { apiService } from '../../services/api.provider';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { Paperclip, Calendar, Bell, User as UserIcon, Edit, Trash2 } from 'lucide-react';
+import Paperclip from 'lucide-react/dist/esm/icons/paperclip';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import User from 'lucide-react/dist/esm/icons/user';
+import Edit from 'lucide-react/dist/esm/icons/edit';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { useAuth } from '../../context/AuthContext';
 import { useQueryClient } from '@tanstack/react-query';
 import AnnouncementEditModal from './AnnouncementEditModal';
@@ -114,7 +119,7 @@ const AnnouncementView: React.FC = () => {
         
         <div className="pl-9 md:pl-12 text-sm md:text-base text-gray-600 space-y-2 border-l-2 border-gray-100 ml-3 md:ml-4">
           <p className="flex items-center gap-2"><Calendar className="w-4 h-4" /> <strong>Posted:</strong> {new Date(announcement.time).toLocaleString()}</p>
-          <p className="flex items-center gap-2"><UserIcon className="w-4 h-4" /> <strong>By:</strong> {announcement.name}</p>
+          <p className="flex items-center gap-2"><User className="w-4 h-4" /> <strong>By:</strong> {announcement.name}</p>
         </div>
 
         <p className="text-sm md:text-base text-gray-800 whitespace-pre-wrap pl-9 md:pl-12">{announcement.description}</p>

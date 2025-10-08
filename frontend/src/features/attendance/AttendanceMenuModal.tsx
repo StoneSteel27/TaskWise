@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, UserCheck, Edit } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import UserCheck from 'lucide-react/dist/esm/icons/user-check';
+import Edit from 'lucide-react/dist/esm/icons/edit';
 import { useModalBackButton } from '../../utils/useModalBackButton';
 
 interface AttendanceMenuModalProps {

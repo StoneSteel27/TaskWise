@@ -1,7 +1,9 @@
 import React from 'react';
 import { Course } from '../../types';
 import { useAuth } from '../../context/AuthContext';
-import { User, Users, Hash } from 'lucide-react';
+import User from 'lucide-react/dist/esm/icons/user';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Hash from 'lucide-react/dist/esm/icons/hash';
 
 interface CourseCardProps {
   course: Course;
@@ -25,11 +27,13 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
       className="relative rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out text-white overflow-hidden cursor-pointer min-h-[180px]"
       style={cardStyle}
     >
-      <div className="absolute top-0 right-0 h-full w-2/5">
+      <div className="absolute top-0 right-0 h-full">
         <img
           src={imageUrl}
           alt={course.name}
-          className="w-full h-full object-contain mix-blend-multiply"
+          className="h-full object-contain mix-blend-multiply"
+          fetchpriority="high"
+          loading="eager"
         />
       </div>
       <div className="relative flex flex-col justify-between h-full p-4 md:p-6 w-full">

@@ -5,7 +5,7 @@ import { apiService } from '../../services/api.provider';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ScheduleCard from './ScheduleCard';
 import SchoolAnnouncementCreateModal from '../announcements/SchoolAnnouncementCreateModal';
-import { Plus } from 'lucide-react';
+import Plus from 'lucide-react/dist/esm/icons/plus';
 import { useQuery } from '@tanstack/react-query';
 
 const Dashboard: React.FC = () => {
@@ -40,7 +40,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full space-y-3 md:space-y-4">
+    <div className="flex flex-col h-full space-y-3 md:space-y-4 pb-20 md:pb-0">
       {schedule && (
         <div>
           <ScheduleCard 

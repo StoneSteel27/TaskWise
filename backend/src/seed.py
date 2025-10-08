@@ -8,6 +8,8 @@ from src.announcements.models import CourseAnnouncement, SchoolAnnouncement
 from src.tasks.models import Task
 from src.attendance.models import Attendance, AttendanceStatusEnum
 from src.schedules.models import Schedule, DayOfWeek
+from src.geofence.models import Geofence
+import json
 
 def seed_data():
     db = SessionLocal()
@@ -171,6 +173,23 @@ def seed_data():
                         course_id=subjects_in_class[period - 1]
                     )
                     db.add(schedule)
+
+        # --- Geofence ---
+        geofence_coordinates = [
+            [
+                [13.028739115673496, 80.01522632938645][::-1],
+                [13.028668560312445, 80.01606586072745][::-1],
+                [13.028595391768622, 80.01670959082917][::-1],
+                [13.027576256229123, 80.016631806777][::-1],
+                [13.02749002149124, 80.01578422880975][::-1],
+                [13.027774857329424, 80.015108312202940][::-1]
+            ]
+        ]
+        geofence = Geofence(
+            name="SCAD Building",
+            polygon=json.dumps(geofence_coordinates)
+        )
+        db.add(geofence)
 
         # --- Commit ---
         db.commit()

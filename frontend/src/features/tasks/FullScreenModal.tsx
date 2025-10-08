@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Course } from '../../types';
 import CourseDashboardHeader from '../dashboard/CourseDashboardHeader';
 import { useModalBackButton } from '../../utils/useModalBackButton';
@@ -16,7 +15,6 @@ interface FullScreenModalProps {
 
 const FullScreenModal: React.FC<FullScreenModalProps> = ({ children, title, course, statusComponent, isOpen, onClose }) => {
   const [isClosing, setIsClosing] = useState(false);
-  const navigate = useNavigate();
 
   useModalBackButton(isOpen, handleClose);
 

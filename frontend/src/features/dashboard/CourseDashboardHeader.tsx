@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { Course } from '../../types';
-import { User, Users, Hash, Pencil } from 'lucide-react';
+import User from 'lucide-react/dist/esm/icons/user';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Hash from 'lucide-react/dist/esm/icons/hash';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
 import { useAuth } from '../../context/AuthContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiService } from '../../services/api.provider';
@@ -48,7 +51,7 @@ const CourseDashboardHeader: React.FC<CourseDashboardHeaderProps> = ({ course })
 
   const headerStyle = {
     backgroundColor: course.accent_color,
-    height: '120px',
+    height: '180px',
   };
 
   return (
@@ -59,6 +62,8 @@ const CourseDashboardHeader: React.FC<CourseDashboardHeaderProps> = ({ course })
           alt={course.name}
           className="h-full object-contain mix-blend-multiply"
           key={imageKey}
+          fetchpriority="high"
+          loading="eager"
         />
       </div>
       <div className="relative z-10 p-4 md:p-6">

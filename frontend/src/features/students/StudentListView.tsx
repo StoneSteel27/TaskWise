@@ -31,11 +31,13 @@ const StudentListView: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {students?.map(student => (
           <Link to={`/student/${student.roll_number}`} key={student.roll_number} className="block bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center space-x-4">
-              <img src={student.profile_picture_url} alt={student.name} className="w-16 h-16 rounded-full object-cover" />
-              <div>
-                <p className="font-bold text-lg">{student.name}</p>
-                <p className="text-sm text-gray-600">{student.roll_number}</p>
+            <div className="h-full">
+              <div className="flex items-center space-x-4">
+                <img src={student.profile_picture_url} alt={student.name} className="w-16 h-16 rounded-full object-cover" />
+                <div>
+                  <p className="font-bold text-lg">{student.name}</p>
+                  <p className="text-sm text-gray-600">{student.roll_number}</p>
+                </div>
               </div>
             </div>
           </Link>

@@ -117,6 +117,13 @@ class Progress(BaseModel):
     tasks_completed: int
     tasks_total: int
 
+class Grades(BaseModel):
+    s: int
+    a: int
+    b: int
+    c: int
+    d: int
+    overall: Grade
 
 class ContactInfo(BaseModel):
     email: str
@@ -131,5 +138,6 @@ class StudentProfile(BaseModel):
     roll_number: str
     classroom: str
     progress: Progress
+    grades: Grades
     contact_info: ContactInfo
     home_address: str

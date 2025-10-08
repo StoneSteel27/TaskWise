@@ -13,6 +13,7 @@ from src.attendance.router import router as attendance_router
 from src.attendance.router_teacher import router as teacher_attendance_router
 from src.attachments.router import router as attachments_router
 from src.assets.router import router as assets_router
+from src.geofence.router import router as geofence_router
 from src.seed import seed_data
 from src.exceptions import TaskNotFound, CourseNotFound, AnnouncementNotFound, NotAuthorized, SubmissionAlreadyExists
 
@@ -192,6 +193,7 @@ app.include_router(attendance_router, prefix="/v1/api", tags=["attendance"])
 app.include_router(attachments_router, prefix="/v1/api", tags=["attachments"])
 app.include_router(assets_router,prefix="/v1/api", tags=["assets"])
 app.include_router(teacher_attendance_router, prefix="/v1/api")
+app.include_router(geofence_router, prefix="/v1/api", tags=["geofence"])
 
 app.mount("/admin", admin.app)
 

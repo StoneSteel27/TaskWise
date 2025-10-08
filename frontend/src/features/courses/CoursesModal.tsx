@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
 import { Course } from '../../types';
 import { apiService } from '../../services/api.provider';
 import CourseCard from './CourseCard';
@@ -74,7 +74,7 @@ const CoursesModal: React.FC<CoursesModalProps> = ({ isOpen, onClose }) => {
       <div 
         className={`
           bg-white shadow-xl transform transition-all duration-300 ease-in-out
-          md:rounded-lg md:max-w-4xl md:h-auto md:max-h-[90vh]
+          md:rounded-lg md:max-w-6xl md:h-auto md:max-h-[90vh]
           w-full h-full fixed md:relative flex flex-col
           ${
             isOpen && !isClosing

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Schedule, Course } from '../../types';
-import { Clock, Coffee } from 'lucide-react';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Coffee from 'lucide-react/dist/esm/icons/coffee';
 import { useNavigate } from 'react-router-dom';
 
 interface ScheduleCardProps {

@@ -4,10 +4,16 @@ import { apiService } from '../../services/api.provider';
 import { useParams } from 'react-router-dom';
 import { Student } from '../../types';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { Mail, Phone, Home, BarChart2, Copy } from 'lucide-react';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import Home from 'lucide-react/dist/esm/icons/home';
+import BarChart2 from 'lucide-react/dist/esm/icons/bar-chart-2';
+import Copy from 'lucide-react/dist/esm/icons/copy';
 import { showErrorToast, showSuccessToast } from '../../utils/notifications';
 
 import RingProgress from '../../components/RingProgress';
+
+import GradeChart from './GradeChart';
 
 const StudentProfileView: React.FC = () => {
   const { rollNumber } = useParams<{ rollNumber: string }>();
@@ -61,9 +67,9 @@ const StudentProfileView: React.FC = () => {
   );
 
   return (
-    <div className="p-2 md:p-6 space-y-3 md:space-y-6">
+    <div className="space-y-3 md:space-y-6 pb-20 md:pb-0">
       {/* Header */}
-      <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 bg-white p-4 md:p-6 rounded-lg shadow-sm">
+      <div className="flex flex-col md:flex-row items-center md:items-center gap-4 md:gap-6 bg-white p-4 md:p-6 rounded-lg shadow-sm">
         <img src={student.profile_picture_url} alt={student.name} className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-blue-200" />
         <div className="text-center md:text-left pt-2 md:pt-4">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{student.name}</h1>
@@ -106,6 +112,7 @@ const StudentProfileView: React.FC = () => {
               </div>
             </div>
           )}
+          {student.grades && <GradeChart grades={student.grades} />}
         </div>
 
         {/* Right Column: Info */}

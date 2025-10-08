@@ -3,7 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Task } from '../../types';
 import { apiService } from '../../services/api.provider';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { ClipboardCheck, Clock, User as UserIcon, Paperclip, UploadCloud, Download, Edit, Trash2, Users } from 'lucide-react';
+import ClipboardCheck from 'lucide-react/dist/esm/icons/clipboard-check';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import User from 'lucide-react/dist/esm/icons/user';
+import Paperclip from 'lucide-react/dist/esm/icons/paperclip';
+import UploadCloud from 'lucide-react/dist/esm/icons/upload-cloud';
+import Download from 'lucide-react/dist/esm/icons/download';
+import Edit from 'lucide-react/dist/esm/icons/edit';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import Users from 'lucide-react/dist/esm/icons/users';
 import SubmissionsList from './SubmissionsList';
 import { useAuth } from '../../context/AuthContext';
 import TaskEditModal from './TaskEditModal';
@@ -227,7 +235,7 @@ const TaskView: React.FC<TaskViewProps> = ({ task: initialTask, onTaskUpdate }) 
 
       <div className="pl-9 md:pl-12 text-sm md:text-base text-gray-600 space-y-2 border-l-2 border-gray-100 ml-3 md:ml-4">
         <p className="flex items-center gap-2"><Clock className="w-4 h-4" /> <strong>Due:</strong> {new Date(task.deadline).toLocaleString()}</p>
-        <p className="flex items-center gap-2"><UserIcon className="w-4 h-4" /> <strong>By:</strong> {task.name}</p>
+        <p className="flex items-center gap-2"><User className="w-4 h-4" /> <strong>By:</strong> {task.name}</p>
       </div>
 
       <p className="text-sm md:text-base text-gray-800 whitespace-pre-wrap pl-9 md:pl-12">{task.description}</p>

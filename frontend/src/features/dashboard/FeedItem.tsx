@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Announcement, Task } from '../../types';
-import { Bell, ClipboardCheck } from 'lucide-react';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import ClipboardCheck from 'lucide-react/dist/esm/icons/clipboard-check';
 
 interface FeedItemProps {
   item: Announcement | Task;

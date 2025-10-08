@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;

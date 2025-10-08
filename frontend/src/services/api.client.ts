@@ -112,6 +112,11 @@ export const realApiService = {
     return response.data;
   },
 
+  getCourse: async (courseId: string): Promise<Course> => {
+    const response = await apiClient.get(`/courses/${courseId}`);
+    return response.data;
+  },
+
   getCourseDashboard: async (courseId: string): Promise<CourseDashboard> => {
     const response = await apiClient.get(`/me/${courseId}/dashboard`);
     return response.data;
@@ -263,6 +268,11 @@ export const realApiService = {
     return response.data;
   },
 
+  getTeacherAttendanceHistory: async (year: number, month: number): Promise<{ history: { date: string; check_in_time: string | null; check_out_time: string | null; }[] }> => {
+    const response = await apiClient.get('/attendance/teacher/me/attendance-history', { params: { year, month } });
+    return response.data;
+  },
+
   getTeacherClasses: async (): Promise<{ classes: Course[] }> => {
     const response = await apiClient.get('/me/classes');
     return response.data;
@@ -299,6 +309,11 @@ export const realApiService = {
     return response.data;
   },
 
+  checkOutWithRecoveryCode: async (payload: RecoveryCheckInPayload): Promise<{ message: string, check_out_time: string }> => {
+    const response = await apiClient.post('/attendance/teacher/recovery-check-out', payload);
+    return response.data;
+  },
+
   getTeacherAttendanceStatus: async (): Promise<{ status: string; check_in_time?: string; check_out_time?: string, is_device_registered: boolean }> => {
     const response = await apiClient.get('/attendance/teacher/status'); 
     return response.data;
@@ -307,6 +322,18 @@ export const realApiService = {
   verifyTeacherCheckOut: async (payload: CheckInPayload): Promise<{ message: string, check_out_time: string }> => {
     const response = await apiClient.post('/attendance/teacher/check-out', payload);
     return response.data;
+  },
+
+  getGeoFence: async (): Promise<GeoFence[]> => {
+    const response = await apiClient.get('/geofence/coordinates/');
+    if (response.data && Array.isArray(response.data)) {
+      return response.data.map((fence: any) => ({
+        id: fence.id,
+        name: fence.name,
+        coordinates: fence.polygon || fence.coordinates,
+      }));
+    }
+    return [];
   },
 
   updateCourseAccentImage: async (courseId: string, formData: FormData): Promise<{ message: string }> => {

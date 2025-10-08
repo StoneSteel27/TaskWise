@@ -1,6 +1,7 @@
 import React from 'react';
 import { Student } from '../../types';
-import { Mail, Phone } from 'lucide-react';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Phone from 'lucide-react/dist/esm/icons/phone';
 
 interface StudentCardProps {
   student: Student;

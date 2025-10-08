@@ -306,6 +306,6 @@ export const ApiService = {
     const filename = `${studentRollNumber}_${taskId}_submission.txt`;
     return mockApiCall({ blob, filename });
   },
-  updateCourseAccentImage: (courseId: string) => 
+  updateCourseAccentImage: () => 
     mockApiCall({ message: "Course accent image updated successfully." }),
 };
